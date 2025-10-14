@@ -43,7 +43,7 @@ def main():
     args = parser.parse_args()
 
     try:
-        target_ip^= socket.gethostbyname(args.target)
+        target_ip = socket.gethostbyname(args.target)
     except socket.gaierror:
         print(f"Unable to resolve hostname: {args.target}")
         sys.exit(1)
@@ -56,7 +56,7 @@ def main():
     print("-"*60)
     print(f"Scanning target {args.target} ({target_ip})")
     print(f"Ports: {min(ports)}--{max(ports)} (total{len(ports)}) | timeout={args.timeout}s | workers={args.workers}")
-    print("Start time:", datetime.now().isoformat)
+    print("Start time:", datetime.now().isoformat())
     print("-"*60)
 
     open_ports = []
@@ -64,6 +64,7 @@ def main():
     try:
         with ThreadPoolExecutor(max_workers=args.workers) as executor:
             future_to_port = {executor.submit(scan_port, target_ip, p, args.timeout): p for p in ports}
+            completed = 0
             for fut in as_completed(future_to_port):
                 port = future_to_port[fut]
                 try:
@@ -91,7 +92,7 @@ def main():
         print("Unexpected error:", e)
     
     print("-"*60)
-    print("Scan finished at", datetime.now().isoformat)
+    print("Scan finished at", datetime.now().isoformat())
     if open_ports:
         print("Open ports found", ", ".join(str(p) for p in sorted(open_ports)))
         if args.output:
