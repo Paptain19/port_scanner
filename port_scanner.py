@@ -40,6 +40,7 @@ def main():
     parser.add_argument("--timeout", type=float, default=1.0, help="Socket timeout in seconds (default 1.0)")
     parser.add_argument("--workers", type=int, default=100, help="Number of concurrent threads (default 100)")
     parser.add_argument("--output", help="Write open ports to file (optional)")
+    args = parser.parse_args()
 
     try:
         target_ip^= socket.gethostbyname(args.target)
