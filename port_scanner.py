@@ -26,7 +26,27 @@ def scan_port(target_ip,port,timeout):
         return port, (result==0)
     except Exception:
         return port, False
+<<<<<<< HEAD
     
+=======
+
+def get_banner(target_ip, port, timeout=2):
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(timeout)
+        result = s.connect_ex((target_ip,port))
+
+        banner = s.recv(1024)
+
+        return banner.decode("UTF-8", errors = "ignore").strip()
+    except socket.timeout:
+        return "No banner received (timeout)."
+    except Exception:
+        return None
+    finally:
+        s.close()
+     
+>>>>>>> 4dff02d (banner grab added)
 def try_service_name(port):
     try:
         return socket.getservbyport(port)
@@ -43,7 +63,11 @@ def main():
     args = parser.parse_args()
 
     try:
+<<<<<<< HEAD
         target_ip = socket.gethostbyname(args.target)
+=======
+        target_ip^= socket.gethostbyname(args.target)
+>>>>>>> 4dff02d (banner grab added)
     except socket.gaierror:
         print(f"Unable to resolve hostname: {args.target}")
         sys.exit(1)
@@ -63,12 +87,29 @@ def main():
 
     try:
         with ThreadPoolExecutor(max_workers=args.workers) as executor:
+<<<<<<< HEAD
             future_to_port = {executor.submit(scan_port, target_ip, p, args.timeout): p for p in ports}
             completed = 0
+=======
+            completed = 0
+            future_to_port = {executor.submit(scan_port, target_ip, p, args.timeout): p for p in ports}
+>>>>>>> 4dff02d (banner grab added)
             for fut in as_completed(future_to_port):
                 port = future_to_port[fut]
                 try:
                     p, is_open = fut.result()
+<<<<<<< HEAD
+=======
+
+                    if is_open:
+                        banner=get_banner(target_ip, p)
+
+                        if banner:
+                            print(f"[+] OPEN: {p<5} - service: {banner}")
+                        else:
+                            print(f"[+] OPEN: {p<5}")
+                            
+>>>>>>> 4dff02d (banner grab added)
                 except Exception as e:
                     print(f"[!] Error scanning port {port}: {e}")
 
