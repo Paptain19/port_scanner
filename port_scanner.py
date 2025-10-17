@@ -5,6 +5,19 @@ import socket
 from datetime import datetime
 import argparse
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import _mysql_connector
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+db_host = os.getenv("DB_HOST")
+db_database = os.getenv("DB_DATABASE")
+db_user = os.getenv("DB_USER")
+db_pass = os.getenv("DB_PASS")
+
+if not all([db_host, db_database, db_pass, db_user]):
+    print("Erreur: une ou plusieurs variables d'environnement sont manquantes.")
 
 def parse_ports(port_str):
     ports=set()
@@ -26,9 +39,6 @@ def scan_port(target_ip,port,timeout):
         return port, (result==0)
     except Exception:
         return port, False
-<<<<<<< HEAD
-    
-=======
 
 def get_banner(target_ip, port, timeout=2):
     try:
@@ -46,7 +56,7 @@ def get_banner(target_ip, port, timeout=2):
     finally:
         s.close()
      
->>>>>>> 4dff02d (banner grab added)
+
 def try_service_name(port):
     try:
         return socket.getservbyport(port)
@@ -62,12 +72,20 @@ def main():
     parser.add_argument("--output", help="Write open ports to file (optional)")
     args = parser.parse_args()
 
+    conn = mysql.connector.connect(
+        host=db_host,
+        user=db_user,
+        password=db_pass
+        database=db_database
+    )
+    cursor = conn.cursor()
+
     try:
-<<<<<<< HEAD
+
         target_ip = socket.gethostbyname(args.target)
-=======
+
         target_ip^= socket.gethostbyname(args.target)
->>>>>>> 4dff02d (banner grab added)
+
     except socket.gaierror:
         print(f"Unable to resolve hostname: {args.target}")
         sys.exit(1)
@@ -87,29 +105,51 @@ def main():
 
     try:
         with ThreadPoolExecutor(max_workers=args.workers) as executor:
-<<<<<<< HEAD
+
             future_to_port = {executor.submit(scan_port, target_ip, p, args.timeout): p for p in ports}
             completed = 0
-=======
+
             completed = 0
             future_to_port = {executor.submit(scan_port, target_ip, p, args.timeout): p for p in ports}
->>>>>>> 4dff02d (banner grab added)
+
             for fut in as_completed(future_to_port):
                 port = future_to_port[fut]
                 try:
                     p, is_open = fut.result()
-<<<<<<< HEAD
-=======
+
 
                     if is_open:
+                        now = datetime.now()
+
+                        add_host_query = """
+                        INSERT INTO Hotes (ip_address, last_seen)
+                        VALUES (%s, %s)
+                        ON DUPLICATE KEY UPDATE last_seen = %s
+                        """
+                        cursor.execute(add_host_query, (target_ip, now, now))
+
+                        cursor.execute("SELECT id FROM Hotes WHEREN ip_address = %s", (target_ip))
+                        host_id = cursor.fetchone()[0]
+
+                        add_port_query = "INSERT INTO Ports (host_id, port_number, banner, scan_time) VALUES (%s, %s, %s, %s)"
+                        cursor.execute(add_port_query, (host_id, p, banner, now))
+
+                        conn.commit
+
+                        print(f"[+] Port {p} de {target_ip} sauvegardé en BDD mysql")
+                    
+
                         banner=get_banner(target_ip, p)
 
                         if banner:
                             print(f"[+] OPEN: {p<5} - service: {banner}")
                         else:
                             print(f"[+] OPEN: {p<5}")
+                    
+                    cursor.close()
+                    conn.close()
                             
->>>>>>> 4dff02d (banner grab added)
+
                 except Exception as e:
                     print(f"[!] Error scanning port {port}: {e}")
 
