@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {font-family: sans-serif; margin: 2em;}
+        table {width: 100%; border-collapse: collapse;}
+        th, td {border: 1px solid #ccc; padding: 8px; text-align: left;}
+        th {background-color: #f2f2f2;}
+    </style>
+</head>
+<body>
+    <h1>Host detected on the network</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>@IP</th>
+                <th>Host name</th>
+                <th>Last seen</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for host in hosts %}
+            <tr>
+                <td>{{ host.ip_address }}</td>
+                <td>{{ host.hostname or 'N/A' }}</td>
+                <td>{{ host.last_seen}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
