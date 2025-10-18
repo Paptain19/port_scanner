@@ -23,11 +23,11 @@ A simple concurrent TCP port scanner with a minimal Flask dashboard to centraliz
 ## Quick install (local)
 
 1. Clone the repository
-'''bash
+```bash
 git clone https://github.com/Paptain19/port-scanner.git
 cd port-scanner
 
-2. Create a virtual environment and install dependencies:
+3. Create a virtual environment and install dependencies:
 python -m venv venv
 # macOS / Linux
 source venv/bin/activate
