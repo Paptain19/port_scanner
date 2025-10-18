@@ -26,8 +26,10 @@ A simple concurrent TCP port scanner with a minimal Flask dashboard to centraliz
 ```bash
 git clone https://github.com/Paptain19/port-scanner.git
 cd port-scanner
+```
 
 2. Create a virtual environment and install dependencies:
+```bash
 python -m venv venv
 # macOS / Linux
 source venv/bin/activate
@@ -36,15 +38,20 @@ source venv/bin/activate
 
 pip install --upgrade pip
 pip install -r requirements.txt
+```
 
 3. Copy .env.example to .env and fill in values (DB connection etc.):
+```bash
 cp .env.example .env
 # then edit .env and set DB_HOST, DB_USER, DB_PASS, DB_DATABASE
-
+```
+4. Initialize the database:
+```bash
 python db_init.py
-# Initialize the database
+```
 
-4. Run the scanner and the Flask dashboard
+6. Run the scanner and the Flask dashboard
+```bash
 python scanner.py target.example.com --ports 1-1024 --workers 200 --timeout 1.0
 python app.py
 # Open http://127.0.0.1:5000 to view the dashboard
