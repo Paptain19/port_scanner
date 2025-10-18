@@ -50,7 +50,7 @@ cp .env.example .env
 python db_init.py
 ```
 
-6. Run the scanner and the Flask dashboard
+5. Run the scanner and the Flask dashboard
 ```bash
 python scanner.py target.example.com --ports 1-1024 --workers 200 --timeout 1.0
 python app.py
