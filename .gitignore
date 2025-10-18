@@ -1,1 +1,27 @@
+# Byte-compiled / caches
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Environments
+env/
+venv/
 .env
+
+# Editor
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# PyInstaller
+dist/
+build/
+
+# Logs
+*.log
+
+# SQLite
+*.db
