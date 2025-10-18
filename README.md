@@ -20,6 +20,11 @@ A simple concurrent TCP port scanner with a minimal Flask dashboard to centraliz
 
 ---
 
+## Security and legal
+**Legal and ethical notice:** Port scanning can be considered intrusive or hostile behaviour by some network owners and may be illegal in certain jurisdictions when performed without permission. Only run this tool against systems and networks you own or where you have **explicit written authorization** to test. Always obtain prior, documented consent and follow responsible disclosure practices if you discover vulnerabilities. The author assumes no responsibility for misuse — you are fully responsible for ensuring your use complies with local laws and policies.
+
+---
+
 ## Quick install (local)
 
 1. Clone the repository
